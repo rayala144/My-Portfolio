@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rayala Akhil — Backend Engineer</title>
+  <meta name="description"
+    content="Rayala Akhil — Backend Engineer specializing in Python, AWS, Kubernetes and security automation.">
+
+  <!--
+  ============================================================
+  HOW TO ADD A NEW SECTION LATER
+  ============================================================
+  1. Copy one whole <section class="module"> ... </section> block
+     (search "MODULE TEMPLATE" below for a blank starting point).
+  2. Give the <button class="module__head"> a unique id-friendly
+     data-key, e.g. data-key="publications".
+  3. Change the "$ section-name" text and the status dot color
+     class (dot--on = green/active, dot--off = grey/inactive).
+  4. Put whatever content you want inside <div class="module__body">.
+     Reuse .entry, .entry__head, .entry__meta, .bullets etc. or just
+     write plain paragraphs — nothing else needs to change, the
+     accordion JS auto-detects every .module on the page.
+  ============================================================
+-->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0A0D12;
+      --panel: #12161D;
+      --panel-raised: #171C24;
+      --line: #232A34;
+      --line-soft: #1B212B;
+      --text: #DCE3EA;
+      --text-dim: #7C8798;
+      --text-faint: #4E5865;
+      --green: #3ECF8E;
+      --amber: #E8A33D;
+      --cyan: #57B6C2;
+      --red: #E2685A;
+
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+      --radius: 10px;
+      --maxw: 860px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1100px 600px at 15% -10%, rgba(87, 182, 194, 0.06), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(62, 207, 142, 0.05), transparent 55%),
+        var(--ink);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* faint scanline / grid texture, purely atmospheric */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+      background-size: 42px 42px;
+      pointer-events: none;
+      z-index: 0;
+      mask-image: radial-gradient(1200px 700px at 50% 0%, black, transparent 75%);
+    }
+
+    a {
+      color: var(--cyan);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    .module__head:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    ::selection {
+      background: rgba(87, 182, 194, 0.3);
+      color: #fff;
+    }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---------- terminal chrome bar ---------- */
+    .chrome {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius) var(--radius) 0 0;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--text-dim);
+    }
+
+    .chrome__dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .chrome__dots span {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .chrome__dots span:nth-child(1) {
+      background: var(--red);
+    }
+
+    .chrome__dots span:nth-child(2) {
+      background: var(--amber);
+    }
+
+    .chrome__dots span:nth-child(3) {
+      background: var(--green);
+    }
+
+    .chrome__path {
+      margin-left: 4px;
+    }
+
+    .chrome__status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green);
+      font-size: 11.5px;
+      letter-spacing: .04em;
+    }
+
+    .chrome__status .pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(62, 207, 142, .6);
+      animation: pulse 2.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(62, 207, 142, .5);
+      }
+
+      70% {
+        box-shadow: 0 0 0 7px rgba(62, 207, 142, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(62, 207, 142, 0);
+      }
+    }
+
+    /* ---------- boot sequence ---------- */
+    #boot {
+      background: var(--ink);
+      border: 1px solid var(--line);
+      border-top: none;
+      padding: 18px 20px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--text-dim);
+      min-height: 128px;
+    }
+
+    #boot .line {
+      opacity: 0;
+      animation: fadein .25s forwards;
+      white-space: pre-wrap;
+    }
+
+    #boot .line b {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    @keyframes fadein {
+      to {
+        opacity: 1;
+      }
+    }
+
+    #boot.done {
+      display: none;
+    }
+
+    /* ---------- hero ---------- */
+    #hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-top: none;
+      padding: 40px 32px 34px;
+      opacity: 0;
+    }
+
+    #hero.show {
+      animation: heroin .5s ease forwards;
+    }
+
+    @keyframes heroin {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--cyan);
+      letter-spacing: .06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .eyebrow::before {
+      content: "$";
+      color: var(--text-faint);
+    }
+
+    h1 {
+      font-family: var(--mono);
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: 0 0 8px;
+      color: #fff;
+    }
+
+    .role {
+      font-family: var(--sans);
+      font-size: clamp(15px, 2.4vw, 18px);
+      color: var(--text-dim);
+      font-weight: 500;
+      margin: 0 0 18px;
+    }
+
+    .role b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .tagline {
+      max-width: 62ch;
+      color: var(--text);
+      font-size: 15.5px;
+      margin: 0 0 26px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .stat {
+      background: var(--panel-raised);
+      padding: 14px 12px;
+      text-align: left;
+    }
+
+    .stat__num {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .stat__label {
+      font-size: 10.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-top: 4px;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--panel-raised);
+      border: 1px solid var(--line);
+      padding: 10px 16px;
+      border-radius: 7px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color .15s ease, transform .15s ease, background .15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--cyan);
+      transform: translateY(-1px);
+    }
+
+    .btn--primary {
+      background: linear-gradient(180deg, rgba(62, 207, 142, .16), rgba(62, 207, 142, .08));
+      border-color: rgba(62, 207, 142, .4);
+      color: #DFFCEF;
+    }
+
+    .btn--primary:hover {
+      border-color: var(--green);
+    }
+
+    .btn svg {
+      width: 14px;
+      height: 14px;
+      flex: none;
+    }
+
+    /* ---------- modules (accordion) ---------- */
+    #modules {
+      border: 1px solid var(--line);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      overflow: hidden;
+    }
+
+    .module {
+      border-top: 1px solid var(--line);
+    }
+
+    .module:first-child {
+      border-top: none;
+    }
+
+    .module__head {
+      all: unset;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 20px;
+      background: var(--panel);
+      cursor: pointer;
+      font-family: var(--mono);
+    }
+
+    .module__head:hover {
+      background: var(--panel-raised);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex: none;
+    }
+
+    .dot--on {
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(62, 207, 142, .5);
+    }
+
+    .dot--off {
+      background: var(--text-faint);
+    }
+
+    .module__title {
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: .01em;
+    }
+
+    .module__title::before {
+      content: "$ ";
+      color: var(--text-faint);
+    }
+
+    .module__hint {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-faint);
+      display: none;
+    }
+
+    @media(min-width:640px) {
+      .module__hint {
+        display: inline;
+      }
+    }
+
+    .toggle {
+      position: relative;
+      width: 22px;
+      height: 22px;
+      flex: none;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle::before,
+    .toggle::after {
+      content: "";
+      position: absolute;
+      background: var(--text-dim);
+      transition: transform .25s ease;
+    }
+
+    .toggle::before {
+      width: 10px;
+      height: 1.5px;
+    }
+
+    .toggle::after {
+      width: 1.5px;
+      height: 10px;
+    }
+
+    .module[aria-expanded="true"] .toggle::after {
+      transform: rotate(90deg);
+      opacity: 0;
+    }
+
+    .module[aria-expanded="true"] .toggle {
+      border-color: var(--cyan);
+    }
+
+    .module[aria-expanded="true"] .toggle::before {
+      background: var(--cyan);
+    }
+
+    .module__panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .3s ease;
+      background: var(--ink);
+    }
+
+    .module[aria-expanded="true"] .module__panel {
+      grid-template-rows: 1fr;
+    }
+
+    .module__body {
+      overflow: hidden;
+      padding: 0 22px;
+    }
+
+    .module__panel .module__body {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .module[aria-expanded="true"] .module__body {
+      padding: 4px 22px 24px;
+    }
+
+    .lede {
+      color: var(--text);
+      font-size: 15px;
+      max-width: 64ch;
+    }
+
+    .entry {
+      margin-bottom: 22px;
+    }
+
+    .entry:last-child {
+      margin-bottom: 4px;
+    }
+
+    .entry__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 14px;
+      margin-bottom: 6px;
+    }
+
+    .entry__role {
+      font-weight: 600;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .entry__org {
+      color: var(--cyan);
+      font-size: 13.5px;
+    }
+
+    .entry__meta {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--text-faint);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--green);
+      border: 1px solid rgba(62, 207, 142, .35);
+      background: rgba(62, 207, 142, .08);
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: .04em;
+    }
+
+    .bullets {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    .bullets li {
+      margin-bottom: 7px;
+    }
+
+    .bullets li::marker {
+      color: var(--cyan);
+    }
+
+    .bullets b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .skillgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .skillcat h4 {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--amber);
+      margin: 0 0 8px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text);
+      background: var(--panel-raised);
+      border: 1px solid var(--line);
+      padding: 4px 9px;
+      border-radius: 6px;
+    }
+
+    .edu__school {
+      font-weight: 600;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .edu__degree {
+      color: var(--text-dim);
+      font-size: 13.5px;
+      margin-top: 2px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .contact-card {
+      background: var(--panel-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contact-card>div {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .contact-card a {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .contact-card svg {
+      width: 16px;
+      height: 16px;
+      color: var(--cyan);
+      flex: none;
+    }
+
+    .contact-card a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13.5px;
+    }
+
+    .contact-card a:hover {
+      color: var(--cyan);
+    }
+
+    .contact-card .lbl {
+      font-size: 10px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* copy button removed */
+
+    /* ---------- footer ---------- */
+    footer {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-faint);
+      padding: 0 4px;
+    }
+
+    footer a {
+      color: var(--text-faint);
+    }
+
+    footer a:hover {
+      color: var(--cyan);
+    }
+
+    @media (max-width:560px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #hero {
+        padding: 30px 20px 28px;
+      }
+
+      .entry__meta {
+        margin-left: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      #boot .line {
+        animation: none;
+        opacity: 1;
+      }
+
+      #hero {
+        animation: none !important;
+        opacity: 1;
+      }
+
+      .module__panel,
+      .toggle::before,
+      .toggle::after,
+      .btn {
+        transition: none;
+      }
+
+      .chrome__status .pulse {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <div class="chrome">
+      <span class="chrome__dots"><span></span><span></span><span></span></span>
+      <span class="chrome__path">akhil@systems-ops:~$</span>
+      <span class="chrome__status"><span class="pulse"></span>open to opportunities</span>
+    </div>
+
+    <div id="boot"></div>
+
+    <section id="hero">
+      <div class="eyebrow">whoami</div>
+      <h1>Rayala Akhil</h1>
+      <p class="role"><b>Backend Engineer</b> — Python · AWS · Kubernetes · DevOps Automation</p>
+      <p class="tagline">I build automated systems that keep large infrastructures secure, observable, and running
+        without needing to be babysat — from scan orchestration across thousands of assets to the CI/CD pipelines that
+        ship the code doing it.</p>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat__num" data-count="3" data-suffix="+">0</div>
+          <div class="stat__label">Years Experience</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num" data-count="10000" data-suffix="+">0</div>
+          <div class="stat__label">Assets Orchestrated</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num" data-count="99" data-suffix="%+">0</div>
+          <div class="stat__label">Uptime Maintained</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num" data-count="70" data-suffix="%">0</div>
+          <div class="stat__label">Manual Effort Cut</div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn--primary" href="mailto:rayalaakhil1999@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16v16H4z" />
+            <path d="m4 6 8 7 8-7" />
+          </svg>
+          Email me
+        </a>
+        <a class="btn" href="./Rayala_Akhil_Resume.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v12" />
+            <path d="m7 10 5 5 5-5" />
+            <path d="M5 21h14" />
+          </svg>
+          Download resume
+        </a>
+        <a class="btn" href="https://github.com/rayala144" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" />
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </section>
+
+    <div id="modules">
+
+      <!-- ===== ABOUT ===== -->
+      <section class="module" aria-expanded="true">
+        <button class="module__head" data-key="about">
+          <span class="dot dot--on"></span>
+          <span class="module__title">about</span>
+          <span class="module__hint">profile.md</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+            <p class="lede">Backend engineer with 3+ years building large-scale security automation systems at Cisco,
+              via HCL. Specialized in Python-based ETL pipelines, scan orchestration across 5,000+ assets, and
+              cloud-native deployments on AWS and Kubernetes. Currently looking for high-impact product engineering
+              roles where that same appetite for automating away toil can be pointed at a bigger problem.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== EXPERIENCE ===== -->
+      <section class="module" aria-expanded="true">
+        <button class="module__head" data-key="experience">
+          <span class="dot dot--on"></span>
+          <span class="module__title">experience</span>
+          <span class="module__hint">2 roles</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+
+            <div class="entry">
+              <div class="entry__head">
+                <span class="entry__role">Software Engineer — Cloud Security Engineering Operations</span>
+                <span class="badge">current</span>
+                <span class="entry__meta">Jun 2024 – Present</span>
+              </div>
+              <div class="entry__org">Cisco, via HCL Technologies Ltd. · Bengaluru, India</div>
+              <ul class="bullets" style="margin-top:10px;">
+                <li>Orchestrated automated security scans across <b>10,000+ Cisco assets</b>, cutting manual scan effort
+                  by roughly <b>70%</b> through Python-based scheduling and workflow automation.</li>
+                <li>Built ETL/data processing pipelines for scan results, enabling structured reporting for security
+                  teams and cutting report generation time from hours to minutes.</li>
+                <li>Implemented a real-time alerting system (Webex + Email) covering 10+ security team members, reducing
+                  incident response lag by ~40%.</li>
+                <li>Designed 10+ CRON-based schedulers for periodic workflows, taking manual intervention from ~20
+                  hrs/week to near-zero.</li>
+                <li>Integrated AWS (S3, DynamoDB) for storage and metadata, Redis for caching and fast lookups, and
+                  SharePoint for report distribution.</li>
+                <li>Containerized and deployed microservices on Kubernetes, managing pod lifecycle and monitoring while
+                  maintaining <b>99%+ uptime</b>.</li>
+                <li>Authored CI/CD pipelines in GitLab and automated routine operations with Bash and Python across
+                  Linux (Ubuntu) environments.</li>
+              </ul>
+            </div>
+
+            <div class="entry">
+              <div class="entry__head">
+                <span class="entry__role">Technical Lead — Internationalization (i18n)</span>
+                <span class="entry__meta">Aug 2022 – May 2024</span>
+              </div>
+              <div class="entry__org">HCL Technologies Ltd. · Chennai, India</div>
+              <ul class="bullets" style="margin-top:10px;">
+                <li>Led i18n efforts for Cisco products vManage and NDO, ensuring compliance across multiple locales.
+                </li>
+                <li>Built internal automation tools to streamline i18n validation and testing, cutting QA turnaround by
+                  ~30% — recognized with an internal reward for value-added contributions.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROJECTS ===== -->
+      <section class="module" aria-expanded="false">
+        <button class="module__head" data-key="projects">
+          <span class="dot dot--off"></span>
+          <span class="module__title">projects</span>
+          <span class="module__hint">1 shipped</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+            <div class="entry">
+              <div class="entry__head">
+                <span class="entry__role">Web-Based Excel Automation Tool</span>
+              </div>
+              <div class="entry__org">Personal project — built for a family business</div>
+              <ul class="bullets" style="margin-top:10px;">
+                <li>Built a full-stack Flask web app that automates multi-sheet Excel parsing and reporting for a family
+                  business workflow, with Supabase (Postgres + Storage) persisting file history and ConvertAPI
+                  generating PDFs automatically.</li>
+                <li>Cut a 3–4 hour manual Excel calculation process down to under 10 seconds (~98% time reduction) using
+                  NumPy and OpenPyXL.</li>
+                <li>Containerized the app with Docker and set up a GitHub Actions CI/CD pipeline to auto-build and push
+                  images to Docker Hub on every commit or pull request.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SKILLS ===== -->
+      <section class="module" aria-expanded="false">
+        <button class="module__head" data-key="skills">
+          <span class="dot dot--off"></span>
+          <span class="module__title">skills</span>
+          <span class="module__hint">8 categories</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+            <div class="skillgrid">
+              <div class="skillcat">
+                <h4>Languages</h4>
+                <div class="chips"><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Java
+                    (basic)</span><span class="chip">JavaScript</span></div>
+              </div>
+              <div class="skillcat">
+                <h4>Cloud & Infrastructure</h4>
+                <div class="chips"><span class="chip">AWS (S3, DynamoDB)</span><span class="chip">Kubernetes</span><span
+                    class="chip">Docker</span><span class="chip">Redis</span></div>
+              </div>
+              <div class="skillcat">
+                <h4>Automation & ETL</h4>
+                <div class="chips"><span class="chip">CRON</span><span class="chip">Workflow Orchestration</span><span
+                    class="chip">Scan Orchestration</span><span class="chip">Data Pipelines</span><span
+                    class="chip">Scripting</span></div>
+              </div>
+              <div class="skillcat">
+                <h4>DevOps & CI/CD</h4>
+                <div class="chips"><span class="chip">GitLab CI/CD</span><span class="chip">GitHub Actions</span><span
+                    class="chip">Docker Hub</span><span class="chip">Linux (Ubuntu)</span></div>
+              </div>
+              <div class="skillcat">
+                <h4>APIs & Integrations</h4>
+                <div class="chips"><span class="chip">Webex API</span><span class="chip">Email APIs</span><span
+                    class="chip">SharePoint</span><span class="chip">REST APIs</span></div>
+              </div>
+              <div class="skillcat">
+                <h4>Frontend</h4>
+                <div class="chips"><span class="chip">React</span><span class="chip">Angular</span></div>
+              </div>
+              <div class="skillcat">
+                <h4>Data & ML (coursework)</h4>
+                <div class="chips"><span class="chip">NumPy</span><span class="chip">Pandas</span><span
+                    class="chip">Matplotlib</span><span class="chip">Scikit-learn</span></div>
+              </div>
+              <div class="skillcat">
+                <h4>AI & Generative Tools</h4>
+                <div class="chips"><span class="chip">Cursor</span><span class="chip">GitHub Copilot</span><span
+                    class="chip">OpenAI API</span><span class="chip">Prompt Engineering</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CERTIFICATIONS ===== -->
+      <section class="module" aria-expanded="false">
+        <button class="module__head" data-key="certifications">
+          <span class="dot dot--off"></span>
+          <span class="module__title">certifications</span>
+          <span class="module__hint">1</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+            <p class="lede">CCNA — Cisco Certified Network Associate</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== EDUCATION ===== -->
+      <section class="module" aria-expanded="false">
+        <button class="module__head" data-key="education">
+          <span class="dot dot--off"></span>
+          <span class="module__title">education</span>
+          <span class="module__hint">IIT Kanpur</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+            <div class="edu__school">Indian Institute of Technology, Kanpur</div>
+            <div class="edu__degree">B.Tech, Materials Science and Engineering · May 2018 – Apr 2022</div>
+            <ul class="bullets" style="margin-top:10px;">
+              <li>Secretary, Astronomy Club</li>
+              <li>Member, Programming Club</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== COURSES ===== -->
+      <section class="module" aria-expanded="false">
+        <button class="module__head" data-key="courses">
+          <span class="dot dot--off"></span>
+          <span class="module__title">courses</span>
+          <span class="module__hint">continuous learning</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+            <ul class="bullets">
+              <li><b>Machine Learning</b> — Coursera: fundamentals of supervised and unsupervised learning.</li>
+              <li><b>Data Structures and Algorithms in Python</b> — Udemy</li>
+              <li><b>Data Analysis with Python</b> — freeCodeCamp: worked on large Kaggle datasets with NumPy, Pandas,
+                Seaborn and Matplotlib.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CONTACT ===== -->
+      <section class="module" aria-expanded="true">
+        <button class="module__head" data-key="contact">
+          <span class="dot dot--on"></span>
+          <span class="module__title">contact</span>
+          <span class="module__hint">reachable now</span>
+          <span class="toggle"></span>
+        </button>
+        <div class="module__panel">
+          <div class="module__body">
+            <div class="contact-grid">
+              <div class="contact-card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16v16H4z" />
+                  <path d="m4 6 8 7 8-7" />
+                </svg>
+                <div>
+                  <span class="lbl">Email</span>
+                  <a href="mailto:rayalaakhil1999@gmail.com" id="emailLink">rayalaakhil1999@gmail.com</a>
+                </div>
+              </div>
+              <div class="contact-card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1.1.4 2.2.7 3.2a2 2 0 0 1-.5 2.1L8 10.3a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c1 .3 2.1.6 3.2.7a2 2 0 0 1 1.7 2Z" />
+                </svg>
+                <div>
+                  <span class="lbl">Phone</span>
+                  <a href="tel:+919182674883">+91 91826 74883</a>
+                </div>
+              </div>
+              <div class="contact-card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <div>
+                  <span class="lbl">Location</span>
+                  <span>Bengaluru, India</span>
+                </div>
+              </div>
+              <div class="contact-card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" />
+                </svg>
+                <div>
+                  <span class="lbl">GitHub</span>
+                  <a href="https://github.com/rayala144" target="_blank" rel="noopener">github.com/rayala144</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--
+      ===== MODULE TEMPLATE (copy this block to add a new section) =====
+    <section class="module" aria-expanded="false">
+      <button class="module__head" data-key="new-section-name">
+        <span class="dot dot--off"></span>
+        <span class="module__title">section-name</span>
+        <span class="module__hint">optional hint text</span>
+        <span class="toggle"></span>
+      </button>
+      <div class="module__panel">
+        <div class="module__body">
+          <p class="lede">Content goes here.</p>
+        </div>
+      </div>
+    </section>
+    -->
+
+    </div>
+
+    <footer>
+      <span>rayala_akhil © 2026 · last synced <span id="syncTime"></span></span>
+      <span><a href="mailto:rayalaakhil1999@gmail.com">email</a> · <a href="https://github.com/rayala144"
+          target="_blank" rel="noopener">github</a></span>
+    </footer>
+
+  </div>
+
+  <script>
+    // ---------- boot sequence ----------
+    const bootEl = document.getElementById('boot');
+    const heroEl = document.getElementById('hero');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const bootLines = [
+      'initializing profile\u2026 <b>ok</b>',
+      'loading experience.log \u2014 2 entries found',
+      'mounting skills/ (8 categories)',
+      'connecting to contact channel\u2026 <b>online</b>'
+    ];
+
+    function runBoot() {
+      if (reduced) {
+        bootEl.classList.add('done');
+        heroEl.classList.add('show');
+        return;
+      }
+      bootLines.forEach((text, i) => {
+        const div = document.createElement('div');
+        div.className = 'line';
+        div.style.animationDelay = (i * 0.18) + 's';
+        div.innerHTML = '<span style="color:var(--text-faint)">[' + (i + 1) + '/' + bootLines.length + ']</span> ' + text;
+        bootEl.appendChild(div);
+      });
+      setTimeout(() => {
+        bootEl.classList.add('done');
+        heroEl.classList.add('show');
+      }, bootLines.length * 180 + 380);
+    }
+    runBoot();
+
+    // ---------- stat counters ----------
+    function animateCount(el) {
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '';
+      if (reduced) { el.textContent = target.toLocaleString() + suffix; return; }
+      const dur = 900;
+      const start = performance.now();
+      function tick(now) {
+        const p = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased).toLocaleString() + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    document.querySelectorAll('.stat__num').forEach(el => {
+      setTimeout(() => animateCount(el), reduced ? 0 : 700);
+    });
+
+    // ---------- accordion ----------
+    document.querySelectorAll('.module__head').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const module = btn.closest('.module');
+        const isOpen = module.getAttribute('aria-expanded') === 'true';
+        module.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+
+    // copy buttons removed — clipboard handler no longer needed
+
+    // ---------- footer timestamp ----------
+    document.getElementById('syncTime').textContent = new Date().toISOString().slice(0, 10);
+  </script>
+
+</body>
+
+</html>
