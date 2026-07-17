@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#3ECF8E"/>
+      <stop offset="1" stop-color="#57B6C2"/>
+    </linearGradient>
+    <style>
+      .title { font-family: Inter, Arial, Helvetica, sans-serif; font-size: 56px; fill: #0A0D12; font-weight:700 }
+      .sub { font-family: Inter, Arial, Helvetica, sans-serif; font-size: 28px; fill: #0A0D12; opacity: .85 }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)" />
+  <rect x="40" y="40" width="1120" height="550" rx="14" fill="#0A0D12" opacity="0.12" />
+  <g transform="translate(80,220)">
+    <text class="title">Rayala Akhil</text>
+    <text class="sub" y="48">Backend Engineer — Python · AWS · Kubernetes</text>
+  </g>
+</svg>
